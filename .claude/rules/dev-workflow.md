@@ -8,7 +8,7 @@
 .work
 
 ## git.main_branch
-dev
+main
 
 ## gate_plan_auto_proceed
 false
@@ -17,7 +17,7 @@ false
 false
 
 ## use_work_dir_archiving
-false
+true
 
 ## archive_dir
 .work-archive
