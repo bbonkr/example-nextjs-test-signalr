@@ -102,6 +102,11 @@ export default function Home() {
   };
 
   const handleConnect = async () => {
+    if (connectionRef.current) {
+      await connectionRef.current.stop();
+      connectionRef.current = null;
+    }
+
     setConnectionStatus("connecting");
     setConnectionError(null);
     setInvokeResults([]);
@@ -119,6 +124,7 @@ export default function Home() {
       setConnectionStatus("connected");
       await invokeFunctions(connection);
     } catch (err) {
+      connectionRef.current = null;
       setConnectionStatus("failed");
       setConnectionError(err instanceof Error ? err.message : String(err));
     }
@@ -133,7 +139,7 @@ export default function Home() {
         <br />
         <input
           id="accessToken"
-          type="text"
+          type="password"
           value={accessToken}
           onChange={(e) => setAccessToken(e.target.value)}
           style={{ width: "100%" }}
@@ -187,7 +193,11 @@ export default function Home() {
       <section style={{ marginTop: 24 }}>
         <button
           type="button"
-          disabled={!canConnect || connectionStatus === "connecting"}
+          disabled={
+            !canConnect ||
+            connectionStatus === "connecting" ||
+            connectionStatus === "connected"
+          }
           onClick={handleConnect}
         >
           Connect
